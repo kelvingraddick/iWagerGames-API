@@ -1,0 +1,13 @@
+const ErrorType = {
+  NONE: 0,
+  SERVER_PROBLEM: 1,
+  DATABASE_PROBLEM: 2,
+  USERNAME_TAKEN: 3,
+  EMAIL_TAKEN: 4,
+  PHONE_TAKEN: 5,
+  INVALID_CREDENTIALS: 6,
+  NO_DATA_FOUND: 7,
+  INVALID_INPUT: 8
+};
+
+module.exports = ErrorType;
