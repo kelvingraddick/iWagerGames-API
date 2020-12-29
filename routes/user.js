@@ -15,14 +15,12 @@ router.post('/authorize', authorize, async function(req, res, next) {
 });
 
 router.post('/register', async function(req, res, next) {
-  var existingUser = await Database.User.findOne({ $or: [{ username: req.body.username }, { emailAddress: req.body.emailAddress }, { phoneNumber: req.body.phoneNumber }] }).exec();
+  var existingUser = await Database.User.findOne({ $or: [{ username: req.body.username }, { emailAddress: req.body.emailAddress }] }).exec();
   if (existingUser) {
     if (existingUser.username == req.body.username) {
       res.json({ isSuccess: false, errorCode: ErrorType.USERNAME_TAKEN, errorMessage: 'This username is already taken.' });
-    } else if (existingUser.emailAddress == req.body.emailAddress) {
-      res.json({ isSuccess: false, errorCode: ErrorType.EMAIL_TAKEN, errorMessage: 'This email address is already taken.' });
     } else {
-      res.json({ isSuccess: false, errorCode: ErrorType.PHONE_TAKEN, errorMessage: 'This phone number is already taken.' });
+      res.json({ isSuccess: false, errorCode: ErrorType.EMAIL_TAKEN, errorMessage: 'This email address is already taken.' });
     }
   } else {
     var newUser = {

@@ -4,7 +4,7 @@ var Database = require('../helpers/database');
 async function authenticate(req, res, next) {
   try {
     res.user = await Database.User
-      .findOne({ $or: [{ username: req.body.username }, { emailAddress: req.body.emailAddress }, { phoneNumber: req.body.phoneNumber }], password: req.body.password })
+      .findOne({ $or: [{ username: req.body.username }, { emailAddress: req.body.emailAddress }], password: req.body.password })
       .exec()
       .catch((err) => { console.error(err.message); return res.sendStatus(500); });
     if (res.user) {
