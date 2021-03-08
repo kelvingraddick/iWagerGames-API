@@ -4,6 +4,7 @@ var authenticate = require('../middleware/authenticate');
 var authorize = require('../middleware/authorize');
 var jwt = require('jsonwebtoken');
 var Database = require('../helpers/database');
+var Email = require('../helpers/email/email');
 var ErrorType = require('../constants/error-type');
 
 router.post('/authenticate', authenticate, async function(req, res, next) {
@@ -34,6 +35,11 @@ router.post('/register', async function(req, res, next) {
     };
     Database.User.create(newUser)
       .then(async createdUser => {
+
+        await Email.send(createdUser.emailAddress, 'Welcome to iWagerGames ' + createdUser.firstName + '!', 'Thank you for joining the iWagerGames platform', Email.templates.WELCOME)
+          .then(() => {}, error => console.error('Email error: ' + error.message))
+          .catch(error => console.error('Email error: ' + error.message));
+
         var token = jwt.sign({ }, process.env.TOKEN_SECRET, { subject: createdUser._id.toString(), issuer: 'iWagerGames', expiresIn: '1d' });
         res.json({ isSuccess: true, user: createdUser, token: token });
       })
